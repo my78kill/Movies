@@ -73,8 +73,8 @@
 </head>
 <body>
   <div class="card" role="main">
-    <!-- 👇 Yaha apna profile.jpg use hoga (same repo folder me upload karo) -->
-    <img class="avatar" id="avatar" src="profile.jpg" alt="Ayush Thakur photo">
+    <!-- 👇 Yaha apna profile.jpg use hoga (same repo folder me upload karo, name EXACT "profile.jpg") -->
+    <img class="avatar" id="avatar" src="./profile.jpg" alt="Ayush Thakur photo">
     <h1 id="name">Ayush Thakur</h1>
     <p class="lead">Surprise page — search for public-domain movies or check trailers.</p>
 
@@ -93,7 +93,8 @@
   </div>
 
 <script>
-const TMDB_API_KEY = ''; // optional TMDB key here
+const TMDB_API_KEY = ''; // optional
+const HAS_TMDB = TMDB_API_KEY && TMDB_API_KEY.trim() !== '';
 
 const searchBtn = document.getElementById('searchBtn');
 const qInput = document.getElementById('q');
@@ -118,7 +119,7 @@ async function doSearch() {
 
     if (docs.length === 0) {
       resultsDiv.innerHTML = `<p class="small">No public-domain results for "${escapeHtml(q)}".</p>`;
-      if (useTMDB.checked && TMDB_API_KEY) { await searchTMDBAndShow(q); }
+      if (useTMDB.checked && HAS_TMDB) { await searchTMDBAndShow(q); }
       return;
     }
 
@@ -140,14 +141,13 @@ async function doSearch() {
           <p>${escapeHtml(truncate(desc,200))}</p>
           <div class="actions">
             <a href="${itemUrl}" target="_blank" rel="noopener">Open</a>
-            <a href="${itemUrl}/download" target="_blank" rel="noopener">Download</a>
           </div>
         </div>
       `;
       resultsDiv.appendChild(el);
     }
 
-    if (useTMDB.checked && TMDB_API_KEY) { await searchTMDBAndShow(q); }
+    if (useTMDB.checked && HAS_TMDB) { await searchTMDBAndShow(q); }
   } catch (err) {
     resultsDiv.innerHTML = `<p class="small">Error: ${escapeHtml(err.message||err)}</p>`;
   }
